@@ -71,7 +71,7 @@ if(user && (await bcrypt.compare(password,user.password))){
             email:user.email,
             id:user.id,
         }
-    },process.env.ACCESS_TOKEN_SECRET,{expiresIn:"30m"});
+    },process.env.ACCESS_TOKEN_SECRET,{expiresIn:"24hr"});
     res.status(200).json({accessToken});
 }else{
     res.status(401)

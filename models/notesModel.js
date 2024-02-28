@@ -1,5 +1,5 @@
 import mongoose, { Schema } from "mongoose";
-import User from "../models/User.js";
+
 
 export const notesSchema = new mongoose.Schema(
   {
