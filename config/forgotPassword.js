@@ -11,10 +11,10 @@ const sendEmail=asyncHandler(async(req,res)=> {
     const user = await User.findOne({ email });
     if(user){
       const transporter = nodemailer.createTransport({
-        host:"smtp-relay.brevo.com",
+        service:'gmail',
         auth: {
-          user: 'sparshchauhan1503@gmail.com', 
-          pass: 'xsmtpsib-45c18ccc50a5c5eeb061720462a86c014e5f1a1a8a448336f719c2c6420eba8a-D1KvzwJbZqMrY3UV' 
+          user: 'spidyxd0@gmail.com', 
+          pass: 'itoqvsaxlddpptlr' 
         }
       });
     
