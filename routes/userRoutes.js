@@ -1,6 +1,7 @@
 import express from "express";
-import { currentUser, getAllUsers, loginUser, registerUser } from "../controllers/userController.js";
+import { currentUser, getAllUsers, loginUser, registerUser,  } from "../controllers/userController.js";
 import validateToken from "../middleware/tokenHandler.js";
+import sendEmail from "../config/forgotPassword.js";
 
 const UserRouter = express.Router();
 
@@ -11,4 +12,7 @@ UserRouter.post("/login", loginUser);
 UserRouter.get("/current",validateToken,currentUser);
 
 UserRouter.get("/getAllusers",getAllUsers)
+
+UserRouter.post("/sendemail",sendEmail);
+// UserRouter.post("/forgotpassword",resetpassword)
 export default UserRouter;

@@ -7,6 +7,20 @@ import Notes from "../models/notesModel.js";
 const getNotes = asyncHandler(async (req, res) => {
   const notes = await Notes.find({ isRecycled: false, userId: req.user.id });
   res.status(200).json(notes);
+// console.log(notes);
+});
+
+//@desc Get all notes
+//@route Get /api/notes/getAllnotes
+//@acess private
+const getNote = asyncHandler(async (req, res) => {
+  const note = await Notes.findById(req.params.id);
+  if (!note) {
+      res.status(404);
+      throw new Error("Contact not found");
+  }
+  console.log("api hitting");
+  res.status(200).json(note);
 });
 
 //@desc Create new note
@@ -48,9 +62,11 @@ const deleteNotes = asyncHandler(async (req, res) => {
       }
       await Notes.findByIdAndDelete(note);
   }
+  console.log("Notes deleted successfully")
   res.status(200).json({
     message: "Notes deleted",
   });
+
 });
 
 //@desc Update note
@@ -58,6 +74,7 @@ const deleteNotes = asyncHandler(async (req, res) => {
 //@acess private
 const updateNote = asyncHandler(async (req, res) => {
   const note = await Notes.findById(req.params.id);
+  console.log(note);
   if (!note) {
     res.status(404);
     throw new Error("note not found");
@@ -67,8 +84,10 @@ const updateNote = asyncHandler(async (req, res) => {
     throw new Error("User dont have permission");
   }
 
-  const updatedNote = await Notes.findByIdAndUpdate(req.params.id, req.body);
+  const updatedNote = await Notes.findByIdAndUpdate(req.params.id, req.body,{ new: true });
+  console.log(updatedNote);
   res.status(200).json(updatedNote);
+
 });
 
 //@desc Move note to recycle bin
@@ -87,7 +106,6 @@ const moveToRecycleBin = asyncHandler(async (req, res) => {
   }
   note.isRecycled = true;
   await note.save();
-
   res.status(200).json({
     message: "Note moved to recycle bin",
     note,
@@ -112,7 +130,7 @@ const moveMultipleToRecycleBin = asyncHandler(async (req, res) => {
     note.isRecycled = true;
     await note.save();
   }
-
+console.log("multiple to bin")
   res.status(200).json({
     message: "Notes moved to recycle bin",
   });
@@ -124,6 +142,7 @@ const moveMultipleToRecycleBin = asyncHandler(async (req, res) => {
 const getrecycledNotes = asyncHandler(async (req, res) => {
   const notes = await Notes.find({ isRecycled: true, userId: req.user.id});
   res.status(200).json(notes);
+  console.log(notes);
 });
 
 //@desc Set password to the note
@@ -143,6 +162,8 @@ const setPassword = asyncHandler(async (req, res) => {
     }
   note.isPassword = password;
   await note.save();
+  console.log(password);
+  console.log("password set succesfully");
   res.status(200).json({
     message: "Pasword is Set",
   });
@@ -152,21 +173,54 @@ const setPassword = asyncHandler(async (req, res) => {
 //@route PUT /api/notes/removepassword/:id
 //@acess private
 const removePassword = asyncHandler(async (req, res) => {
+  const {password } = req.body; // Assuming password is sent in the request body
+
   const note = await Notes.findById(req.params.id);
 
   if (!note) {
     res.status(404);
     throw new Error("Note not found");
   }
-  if(note.userId.toString() !== req.user.id){
+
+  if (note.userId.toString() !== req.user.id) {
     res.status(403);
-    throw new Error("User dont have permission");
-    }
+    throw new Error("User doesn't have permission");
+  }
+
+  if (note.isPassword !== password) {
+    res.status(401);
+    throw new Error("Incorrect password");
+  }
+
   note.isPassword = null;
   await note.save();
 
+  console.log("Password removed successfully");
+
   res.status(200).json({
-    message: "Pasword is Set",
+    message: "Password is removed",
+  });
+});
+
+
+const restoreNotes = asyncHandler(async (req, res) => {
+  const { noteIds } = req.body;
+
+  for (const noteId of noteIds) {
+    const note = await Notes.findById(noteId);
+    if (!note) {
+      continue;
+    }
+    if (note.userId.toString() !== req.user.id) {
+      res.status(403);
+      throw new Error("User dont have permission");
+    }
+    note.isRecycled = false;
+    await note.save();
+  }
+console.log("multiple to  notes page")
+  res.status(200).json({
+    message: "Notes restored from recycle bin",
   });
 });
 
@@ -180,4 +234,6 @@ export {
   getrecycledNotes,
   setPassword,
   removePassword,
+  restoreNotes,
+  getNote,
 };

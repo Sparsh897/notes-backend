@@ -7,14 +7,14 @@ import dotenv from "dotenv";
 import notesRoutes from "./routes/notesRoutes.js";
 import userRoutes from "./routes/userRoutes.js"
 import {Database , Resource} from "@adminjs/mongoose";
-// import connectDb from "./config/dbConnection.js";
+import path from "path"; 
+// import sendEmail from "./config/forgotPassword.js";
 
 
 AdminJS.registerAdapter({
   Database,
   Resource
 })
-// connectDb();
 dotenv.config(); 
 
 const databaseConnect = await mongoose.connect(process.env.MONGO_DGB_URI);
@@ -23,6 +23,13 @@ app.use(express.json());
 app.use("/api/note", notesRoutes);
 app.use("/api/users", userRoutes);
 app.use(errorHandler);
+// sendEmail();
+app.get('/reset-password.html', (req, res) => {
+  const filePath = new URL('./config/reset-password.html', import.meta.url).pathname;
+  res.sendFile(path.resolve(filePath));
+});
+
+
 
 const port = process.env.PORT || 5000;
 

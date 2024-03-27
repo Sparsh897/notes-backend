@@ -15,6 +15,7 @@
     "@adminjs/express": "^6.1.0",
     "@adminjs/mongoose": "^4.0.0",
     "@types/bcrypt": "^5.0.2",
+    "@types/smtp-server": "^3.5.10",
     "adminjs": "^7.5.12",
     "bcrypt": "^5.1.1",
     "body-parser": "^1.20.2",
@@ -25,6 +26,8 @@
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.3.0",
     "mongoose": "^8.1.1",
+    "nodemailer": "^6.9.12",
+    "smtp-server": "^3.13.3",
     "tslib": "^2.6.2"
   },
   "devDependencies": {

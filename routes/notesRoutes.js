@@ -10,6 +10,8 @@ import {
     getrecycledNotes,
     setPassword,
     removePassword,
+    restoreNotes,
+    getNote,
 } from "../controllers/notescontroller.js"
 import validateToken from "../middleware/tokenHandler.js";
 
@@ -21,7 +23,9 @@ router.route("/updatenote/:id").put(updateNote);
 router.route('/deletenotes').delete(deleteNotes);
 router.route("/tobin/:id").put(moveToRecycleBin);
 router.route('/multipletobin').put(moveMultipleToRecycleBin);
+router.route('/restore').put(restoreNotes);
 router.route('/password/:id').put(setPassword);
 router.route('/removepassword/:id').put(removePassword);
+router.route("/getNote/:id").get(getNote);
 
 export default router;
