@@ -1,7 +1,7 @@
 import express from "express";
 import { currentUser, getAllUsers, loginUser, registerUser,  } from "../controllers/userController.js";
 import validateToken from "../middleware/tokenHandler.js";
-import sendEmail from "../config/forgotPassword.js";
+import sendEmail from "../forgotPassword.js";
 
 const UserRouter = express.Router();
 
